@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    {% include head-custom.html %}
+
+{% seo %}
+  </head>
+
+  <body>
+
+	<div id="page-container">
+		<div id="content-wrap">
+
+			<header>
+			  <div class="container">
+				<a id="a-title" href="{{ '/' | relative_url }}">
+				  <h1>{{ site.title | default: site.github.repository_name }}</h1>
+				</a>
+
+			<div id="menu">
+			  <h2 class="menu-item"><a href="{{ site.url }}">Blog</a></h2>
+			  <h2 class="menu-item"><a href="{{ site.url }}/whoami">Whoami</a></h2>
+			  <h2 class="menu-item"><a href="{{ site.url }}/research">Research</a></h2>
+			  <h2 class="menu-item"><a href="{{ site.url }}/about">About</a></h2>
+			</div>
+
+			  </div>
+
+			{% include icons.html %}
+
+			</header>
+
+			<div class="container">
+			  <section id="main_content">
+				{{ content }}
+			  </section>
+			</div>
+
+		  {% if page.url == "/" or page.url contains "/page" %}
+
+			<div class="pagination">
+			  {% if paginator.previous_page %}
+				<a href="{{ paginator.previous_page_path }}" class="previous">
+				  Previous
+				</a>
+			  {% else %}
+				<span class="previous">Previous</span>
+			  {% endif %}
+			  <span class="page_number ">
+				Page: {{ paginator.page }} of {{ paginator.total_pages }}
+			  </span>
+			  {% if paginator.next_page %}
+				<a href="{{ paginator.next_page_path }}" class="next">Next</a>
+			  {% else %}
+				<span class="next ">Next</span>
+			  {% endif %}
+			</div>
+
+		  {% endif %}
+
+		  {% if page.url == "/" or page.url contains "/tags/" or page.url contains "/page" %}
+			{% include tag_cloud.html %}
+		  {% endif %}
+
+		</div>
+
+		<footer id="footer">
+		  <p><a href="{{ site.url }}/privacy-policy" style="color: #b5e853; font-size: 18px; text-decoration: none;">Privacy Policy</a></p>
+		</footer>
+
+	</div>
+    <script data-goatcounter="https://oncybersec.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+  </body>
+</html>

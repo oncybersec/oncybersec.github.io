@@ -1,0 +1,95 @@
+---
+layout: post
+status: publish
+published: true
+title: Setting up a Network between VMware Workstation Player and VirtualBox Virtual
+  Machines
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 133
+wordpress_url: https://oncybersec.com/?p=133
+date: '2021-01-26 22:20:22 +0200'
+date_gmt: '2021-01-26 20:20:22 +0200'
+tags:
+- vmware
+- virtualbox
+- networking
+- virtualization
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>You may have faced a situation where you have virtual machines that have been set up in both VMware Workstation Player and VirtualBox (on the same computer) and would want them to communicate with one another. This would allow you, for example, to run Kali Linux (running on VMware) against a vulnerable machine such as DVWA (running on VirtualBox). In my case, most of my virtual machines have been set up in VirtualBox, whereas my Kali Linux virtual machine has been set up in VMware Workstation Player, which I used while preparing for the OSCP certification as Offensive Security only support the Kali Linux VMware image. However, with some configuration, one can set up a network between VMware Workstation Player and VirtualBox virtual machines so that the virtual machines can communicate with one other. The below steps will show you how this can be done.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Configuring VirtualBox Network Settings</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Open VirtualBox</li>
+<li>Right-click your VM<strong> </strong>and select <strong>Settings &gt; Network</strong> then select an unused adapter and set the network adaptor to ‘Host-only Adapter’ and click OK</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":268,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_1_network.png" alt="" class="wp-image-268"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Navigate to <strong>File &gt; Host Network Manager</strong>, and make note of the highlighted IP address</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":269,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_2_manager.png" alt="" class="wp-image-269"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2>Configuring VMware Workstation Player Network Settings</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Make sure that you have Virtual Network Editor (vmnetcfg.exe) – follow <a rel="noreferrer noopener" href="{{site.url}}/accessing-virtual-network-editor-in-vmware/" target="_blank">this guide</a> on how to get it</li>
+<li>Run vmnetcfg.exe as administrator</li>
+<li>Select ‘VMnet0’ and set ‘Bridged to’ to ‘VirtualBox Host-Only Ethernet Adapter’.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":270,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_3.1_vmnetcfg.png" alt="" class="wp-image-270"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Select ‘VMnet1’ and change the ‘Subnet IP’ to the subnet address that you obtained from Step 3 and click OK (both VirtualBox and VMWare Workstation Player virtual machines will be part of this subnet)</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":271,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_3.2_vmnetcfg.png" alt="" class="wp-image-271"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Open VMware Workstation Player</li>
+<li>Right-click your VM and select <strong>Settings &gt; Add &gt; Network Adapter &gt; Finish</strong></li>
+<li>While selecting the added adapter, change ‘Network connection’ to Custom, select ‘VMnet0’ and click OK</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":272,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_4_adapter.png" alt="" class="wp-image-272"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2>Verifying Network Connectivity between Virtual Machines</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Your VirtualBox and VMWare Workstation Player virtual machines should now be able to communicate with each other. You can verify this by viewing the IP addresses of your virtual machines by running ipconfig (on Windows) or ifconfig (on Linux) from the command line. In the below screenshots, the output of ifconfig is filtered using the grep command with the subnet part of the IP address, which was configured in Virtual Network Editor.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":273,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_5_kali.png" alt="" class="wp-image-273"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:image {"id":274,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_6_dvwa.png" alt="" class="wp-image-274"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>Connectivity between the virtual machines can be verified by running the ping command:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":275,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_7_ping.png" alt="" class="wp-image-275"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>You should also be able to access other network protocols between the two virtual machines.</p>
+<p><!-- /wp:paragraph --></p>

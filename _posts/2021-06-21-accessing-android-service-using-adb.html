@@ -1,0 +1,65 @@
+---
+layout: post
+status: publish
+published: true
+title: Accessing an Android Service from Docker Using ADB Port Forwarding
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 505
+wordpress_url: https://oncybersec.com/?p=505
+date: '2021-06-21 19:34:34 +0200'
+date_gmt: '2021-06-21 17:34:34 +0200'
+tags:
+- docker
+- android
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>You may come across a situation where you need to access a service running within Android. This can be done using ADB port forwarding and <a rel="noreferrer noopener" href="https://www.genymotion.com/" target="_blank">Genymotion</a>. However, you may experience an issue when trying to access an Android service from a remote application. This post will cover how to address this issue while using an example of <a href="https://labs.f-secure.com/tools/drozer/" target="_blank" rel="noreferrer noopener">Drozer</a> running in a <a rel="noreferrer noopener" href="https://hub.docker.com/r/fsecurelabs/drozer" target="_blank">Docker container</a> on WSL 2.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>The Problem</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>I experienced an issue when trying to connect to a Drozer agent (running in Genymotion) using the Drozer console that was running in a Docker container. To connect to the Drozer agent, you would first need to configure port forwarding using ADB: <code>adb forward tcp:1234 tcp:31415</code>. This would forward port 1234 on the host machine to port 31415 on the Android virtual device and would listen on 127.0.0.1. As a result, the Drozer agent would only be accessible from the host machine and not from the Docker container. This can be verified by running <code>netstat -ano | findstr :1234</code></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":507,"sizeSlug":"large","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large"><img src="{{site.url}}/assets/images/figure_1_netstat_localhost.png" alt="netstat localhost" class="wp-image-507"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>The Solution</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The solution would be to make the ADB server listen on all interfaces (ADB has a global flag for this: <code>-a</code>). This should be done on your own network as the forwarded port will be accessible to anyone on the network. However, you can configure a <a href="{{site.url}}/firewalls-introduction/" target="_blank" rel="noreferrer noopener">firewall</a> rule on your host machine to restrict access. Viewing the Details tab in Task Manager with the Command line column enabled, indicated that the Genymotion ADB server was running without the <code>-a</code> flag, which was why the ADB was listening on 127.0.0.1.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":508,"sizeSlug":"large","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large"><img src="{{site.url}}/assets/images/figure_2_task_manager.png" alt="Task manager" class="wp-image-508"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>Looking at the Genymotion settings, I did not find a setting to configure the ADB server to run using the <code>-a</code> flag. Additionally, attempting to terminate the ADB server by running <code>adb kill-server</code><strong> </strong>didn’t work as the ADB process kept on respawning while Genymotion was running.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The below steps indicate how to address this issue:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Make sure that Genymotion and ADB are not running (check for running adb.exe processes by using Task Manager and terminate any that exist)</li>
+<li>Run the following command to start the ADB server so that it listens on all interfaces: <code>adb -a nodaemon server start</code><strong> </strong>– Genymotion will use this ADB process instead of spawning the ADB process without the -a flag</li>
+<li>Start your Android virtual device in Genymotion</li>
+<li>Configure port forwarding: <code>adb forward tcp:1234 tcp:31415</code></li>
+<li>Run netstat -ano | findstr :1234 on your host machine and you should now find that ADB is listening on all interfaces:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":509,"width":515,"height":40,"sizeSlug":"large","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img src="{{site.url}}/assets/images/figure_3_netstat_any.png" alt="netstat any interface" class="wp-image-509" width="515" height="40"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>With the port forwarded, you should now be able to access the Android service from your Docker container – in my case, I could connect to the Drozer agent from the Drozer console by running <code>drozer console connect --server 192.168.1.4:1234</code><strong> </strong>where 192.168.1.4 is the IP address of the host machine.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,82 @@
+---
+layout: post
+status: publish
+published: true
+title: Troubleshooting Firewall Issues Using Wireshark
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 754
+wordpress_url: https://oncybersec.com/?p=754
+date: '2022-04-10 15:55:54 +0200'
+date_gmt: '2022-04-10 13:55:54 +0200'
+tags:
+- firewall
+- wireshark
+- networking
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>In a previous <a rel="noreferrer noopener" href="{{site.url}}/wireshark-introduction/" target="_blank">post</a>, the basics of Wireshark were covered, which focused on how to analyze network traffic. Another use case of Wireshark that I have found useful is to troubleshoot <a rel="noreferrer noopener" href="{{site.url}}/firewalls-introduction/" target="_blank">firewall</a> issues affecting a client and server in a local or remote environment. For example, when attempting to access a docker container located on another subnet, the attempt may not be successful due to the firewall on the server which is blocking inbound traffic to the docker container. Since this is a firewall-related issue, Wireshark can be used to help troubleshoot this, which this post will demonstrate.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Setting up a Test Server</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>For this demonstration, I will be using python to host an HTTP server running on a virtual machine and I will attempt to access it from another virtual machine acting as the client. Both of these virtual machines are running in a local environment and are located on different subnets - the IP address of the server is 10.1.0.3 and the client's IP address is 192.168.2.128. An HTTP server is started by running the below command:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":755,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_1_http_server.png" alt="HTTP server" class="wp-image-755"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2>Server Blocked By Firewall</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the first test, the firewall on the server will not have any rules configured that allow inbound HTTP traffic on port 80. As a result, attempting to access the HTTP server from the client will not work:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":756,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_2_connection_refused.png" alt="Connection refused" class="wp-image-756"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>We can verify this by starting a live capture on the client using Wireshark and adding the filter <code>tcp.port == 80</code> to only show traffic on port 80 and then try accessing http://10.1.0.3. Here we can see a sequence of three SYN packets that were sent from the client to the server:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":758,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-full"><img src="{{site.url}}/assets/images/figure_3_syn_packets.png" alt="SYN packets in Wireshark" class="wp-image-758"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>For a connection that is allowed, we would have observed the <a rel="noreferrer noopener" href="https://en.wikipedia.org/wiki/Handshaking#TCP_three-way_handshake" target="_blank">TCP three-way handshake</a> where the first three packets would have a SYN, SYN-ACK and ACK flags set respectively. Since we are instead seeing a sequence of SYN packets, this suggests that the connection has been blocked by the firewall.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Server Allowed by Firewall</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now that it appears that the connection was blocked, let's add a firewall rule to allow inbound HTTP traffic on the server using powershell (running as admin):</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":760,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_4_firewall_rule.png" alt="Adding firewall rule in powershell" class="wp-image-760"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>After adding the above rule and navigating to http://10.1.0.3 on the client, the page is successfully loaded:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":761,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_5_http_allowed.png" alt="HTTP connection allowed" class="wp-image-761"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>Looking at the traffic that appeared in Wireshark, we can see that the SYN, SYN-ACK and ACK packets were sent at the beginning of the connection, which confirms that a TCP three-way handshake occurred and that the connection was allowed. We can also see that subsequent packets include a GET request that was sent from the client and that the server responded with an HTTP 200 which indicates that the request was successful:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":762,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_6_http_allowed_wireshark.png" alt="HTTP traffic in Wireshark" class="wp-image-762"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>Based on the above troubleshooting, we identified that the client could not initially connect to the server due to the firewall that was blocking the connection. While this demonstration was conducted in a local environment, the same steps can be followed to identify if a firewall is blocking a remote connection.</p>
+<p><!-- /wp:paragraph --></p>

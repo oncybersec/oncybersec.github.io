@@ -1,0 +1,109 @@
+---
+layout: post
+status: publish
+published: true
+title: Identify Vulnerabilities in Your WordPress Site Using WPScan Plugin
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 590
+wordpress_url: https://oncybersec.com/?p=590
+date: '2021-09-26 21:09:44 +0200'
+date_gmt: '2021-09-26 19:09:44 +0200'
+tags:
+- security operations
+- vulnerability management
+- wordpress
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>WordPress is the most popular content management system and according to <a rel="noreferrer noopener" href="https://w3techs.com/technologies/details/cm-wordpress" target="_blank">W3Techs</a>, powers close to 43% of all websites on the internet. One of the reasons for WordPress's popularity is that it supports customisations through the use of themes and plugins. However, each theme and plugin that is installed has the potential to increase the attack surface due to vulnerabilities that may be present in these components. The WPScan plugin can be used to address this issue by regularly scanning your WordPress site for vulnerabilities. This plugin conducts scans of WordPress core, plugins, themes and also performs various security checks such as scanning for the use of weak passwords. This post will discuss how to configure the WPScan plugin so that it automatically scans your site for vulnerabilities while notifying you of any vulnerabilities that are found.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Configuring WPScan Plugin</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Log into your WordPress site, navigate to <strong>Plugins </strong>&gt;<strong> Add New</strong>, search for ‘wpscan’ then install and activate the plugin</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":592,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_1_install.png" alt="" class="wp-image-592"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Before you can use WPScan, you need to provide an API token. You can get a free API token from <a rel="noreferrer noopener" href="https://wpscan.com/" target="_blank">WPScan</a> by registering an account</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>In WordPress, navigate to <strong>WPScan</strong> &gt; <strong>Settings</strong> </li>
+<li>Paste your API token in the ‘WPScan API token’ field and complete the rest of the fields for scheduling a scan then click ‘Save Changes’</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":593,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_2_settings.png" alt="" class="wp-image-593"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Navigate to <strong>WPScan</strong> &gt; <strong>Report</strong></li>
+<li>To perform a manual scan, select ‘Run All’:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":594,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_3_scan.png" alt="" class="wp-image-594"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Once the scan is complete, the results are returned. We can see here that WPScan detected that the WooCommerce plugin has two vulnerabilities:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":595,"width":590,"height":826,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full is-resized"><img src="{{site.url}}/assets/images/figure_4_plugins.png" alt="" class="wp-image-595" width="590" height="826"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>No vulnerabilities were found in the installed themes:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":596,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_5_themes.png" alt="" class="wp-image-596"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>The last section lists the Security Checks. Here we can see that WPScan detected that the site is not using HTTPS, is using a weak admin password and there is an issue where xml-rpc is enabled. To find out more about an issue including the remediations, select 'Click here for further details'</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":607,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_6_security_checks.png" alt="" class="wp-image-607"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:image {"align":"center","id":601,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_7_security_checks2.png" alt="" class="wp-image-601"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>There is also a ‘Notification’ setting that can be configured so that you receive email alerts if new vulnerabilities are found on your site:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":602,"sizeSlug":"full","linkDestination":"none"} --></p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full"><img src="{{site.url}}/assets/images/figure_8_notification.png" alt="" class="wp-image-602"/></figure>
+</div>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>With the WPScan plugin installed and configured, you will be kept up to date with any new vulnerabilities in your WordPress site and can mitigate them accordingly using the provided remediations.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,22 @@
+---
+layout: post
+status: publish
+published: true
+title: Enumerating Internal Network Processes Using net-enum-listeners
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 527
+wordpress_url: https://oncybersec.com/?p=527
+date: '2021-07-28 19:18:57 +0200'
+date_gmt: '2021-07-28 17:18:57 +0200'
+tags:
+- penetration testing
+- oscp
+- powershell
+- networking
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>One of the areas to focus on after getting an initial foothold on a machine is enumerating ports that are only accessible internally. Each port has a corresponding process that uses it. Important processes to focus on are those that are running as SYSTEM or as a privileged user, which can be used to escalate privileges. However, admin privileges are required to identify what user a specific process is running as. On the other hand, it is possible to identify which process (as well as corresponding services) may be listening on an internal port. While the netstat command’s <code>-b</code> flag requires admin rights to view this information, net-enum-listeners.ps1 can do this without admin privileges. This contextual information can be useful when trying to determine whether a specific process may be running as a privileged user and can be used to find further information about a specific process. More information on how to run the script along with some examples can be found on <a rel="noreferrer noopener" href="https://github.com/oncybersec/net-enum-listeners" target="_blank">GitHub</a>.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,128 @@
+---
+layout: post
+status: publish
+published: true
+title: Reducing False Alarms in Snort Intrusion Detection System
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 450
+wordpress_url: https://oncybersec.com/?p=450
+date: '2021-04-07 21:14:00 +0200'
+date_gmt: '2021-04-07 19:14:00 +0200'
+tags:
+- security operations
+- intrusion detection system
+- cyber defence
+- networking
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>When initially setting up Snort to run as an intrusion detection/prevention system, you are likely to find a large number of alerts due to activity on your network. The majority of generated alerts may be false positives. This will make it harder to find malicious traffic on your network which may be hiding under the false-positive alerts. However, Snort can be tuned to reduce these false positives by configuring commands that will suppress traffic that is deemed to be benign. It is important to understand what is ‘normal’ on your network as this will determine the alerts that you will tune to reduce false positives. For example, the use of PowerShell for automation over the network may be normal if it is coming from the system administrator’s IP address but would be suspicious if the same activity was detected originating from an end user’s computer.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Methods for Reducing False Positives</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The 'event_filter' and 'suppress' commands can be used to reduce false positives. event_filter is used to limit the number of times a certain alert is logged during a specific time period while suppress is used to completely suppress an alert. These commands are configured in the threshold.conf file (/etc/snort/threshold.conf). Three types of event_filters can be configured: limit, threshold and limit + threshold (both). You can also reduce false positives by disabling a rule, which will completely remove the signature from Snort. Below is an example of an alert that will be used to demonstrate tuning Snort:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:table {"className":"is-style-regular"} --></p>
+<figure class="wp-block-table is-style-regular">
+<table>
+<thead>
+<tr>
+<th>Source IP</th>
+<th>Source Port</th>
+<th>Destination IP</th>
+<th>Destination Port</th>
+<th>Event</th>
+<th>SID</th>
+<th>GID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>216.58.223.x</td>
+<td>80</td>
+<td>192.168.2.10</td>
+<td>55205</td>
+<td>ET POLICY PE EXE or DLL Windows file download HTTP</td>
+<td>2018959</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p><!-- /wp:table --></p>
+<p><!-- wp:paragraph --></p>
+<p>This alert (rule available <a href="https://doc.emergingthreats.net/bin/view/Main/2018959" target="_blank" rel="noreferrer noopener">here</a>) is logged when Snort detects an executable file that is downloaded over the internet. This could be a false positive as downloading an update from the internet would trigger this alert. The following fields will be used when tuning Snort: GID (Generator ID), SID (Signature ID), Source IP address and Destination IP address.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Limit</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>This limits the number of alerts that are logged in the specified time period to x alerts. To limit the number of alerts to one alert over a two-minute period the below command can be used:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>event_filter gen_id 1, sig_id 2018959, type limit, count 1, seconds 120 </code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Threshold</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>This logs an alert every x times it appears during the specified time period. The below command can be used to apply a threshold that will log an alert every twenty times it appears within a two-minute period:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>event_filter gen_id 1, sig_id 2018959, type threshold, count 20, seconds 120</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Limit + Threshold (Both)</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Using a combination of limit + threshold logs an alert every x times it appears during the specified time period then ignores any further alerts during the same time period. The below command will log an alert every twenty times it appears within a two-minute period then ignore any additional alerts during the same time period:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>event_filter gen_id 1, sig_id 2018959, type both, count 20, seconds 120</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can also restrict the limit, threshold or limit + threshold commands to either the source or destination IP address that appears in the alert by using the ‘track by_src’ or ‘track by_dst’ keywords. To restrict the previous limit + threshold command to the source IP address that appears in the alert, the below command can be used:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>event_filter gen_id 1, sig_id 2018959, type both, track by_src, count 20, seconds 120</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Suppress</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The suppress command can be used to completely suppress a specific alert or suppress an alert based on the source or destination IP address or CIDR block in the alert. The below command will completely suppress the alert:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>suppress gen_id 1, sig_id 2018959</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>To suppress alerts where the traffic is destined to machines in the 192.168.2.0/24 subnet, the following command can be used:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>suppress gen_id 1, sig_id 2018959, track by_dst, ip 192.168.2.0/24</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The next command will suppress the alert where the source IP address is 216.58.223.x (where x = the value of the last octet):</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>suppress gen_id 1, sig_id 2018959, track by_src, ip 216.58.223.x</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>PulledPork</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you are using <a rel="noreferrer noopener" href="https://github.com/shirkdog/pulledpork" target="_blank">PulledPork</a> to update your rules, you can also disable a rule which will remove the signature from Snort using disablesid.conf (/etc/snort/disablesid.conf). The below entry is in the GID:SID format:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>1:2018959</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This has a performance advantage over suppressing an alert, as there will be less work for Snort to do. You will need to run PulledPork to update your rules, which will disable those rules that are configured. Once you have finished tuning Snort, you will need to restart Snort for the changes to take effect.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To take advantage of Snort's detection capabilities, Snort will need to be tuned, which requires time and effort. Using the previously discussed commands to tune Snort will greatly reduce the number of alerts that are logged due to ‘noisy’ rules and will make malicious traffic on the network more visible.</p>
+<p><!-- /wp:paragraph --></p>

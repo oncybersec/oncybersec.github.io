@@ -1,0 +1,104 @@
+---
+layout: post
+status: publish
+published: true
+title: An Introduction to Firewalls and Their Use in Cyber Defence
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 545
+wordpress_url: https://oncybersec.com/?p=545
+date: '2021-09-04 13:38:18 +0200'
+date_gmt: '2021-09-04 11:38:18 +0200'
+tags:
+- security operations
+- firewall
+- cyber defence
+- networking
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>A firewall is a security control that uses rules to control inbound and outbound network traffic. A firewall can either be host-based or network-based. A host-based firewall is available as software on a system such as Windows Firewall and iptables on Linux. On the other hand, a network firewall is a dedicated device that is located on the perimeter and lies between a trusted network such as a LAN and an untrusted network such as the internet. Examples of network firewalls include a SOHO router that is used in small offices and home offices or an enterprise firewall that is used in large organisations. All firewalls function similarly by using rules to determine if access should be granted. The focus of this post will be on network firewalls.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>How Firewalls Work</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Firewalls examine packets that are part of network traffic and compare them to configured rules, which determines if the traffic should be allowed or denied. In any network communication, there is a source and destination. The source or destination in a rule can match a single host, a group of hosts or any hosts. A rule can be broad – for example, allowing all network traffic between a specific source and destination, or it can be granular by only allowing a certain protocol of traffic through, e.g. TCP and UDP, or allowing traffic that matches a specific port number on the destination. Port numbers correspond to services such as ports 80 and 443 which are used to host or access websites using HTTP or HTTPS respectively. <a rel="noreferrer noopener" href="https://packetlife.net/media/library/23/common-ports.pdf" target="_blank">This resource</a> contains common ports and the services that use them.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Firewall Rules: An Example</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Below is an example of some rules that could be configured on a firewall:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:table {"className":"is-style-regular"} --></p>
+<figure class="wp-block-table is-style-regular">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Destination Port</th>
+<th>Protocol</th>
+<th>Action</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DNS</td>
+<td>192.168.2.0/24</td>
+<td>1.1.1.3</td>
+<td>53</td>
+<td>UDP</td>
+<td>Allow</td>
+<td>Outbound</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>192.168.2.0/24</td>
+<td>any</td>
+<td>80, 443</td>
+<td>TCP</td>
+<td>Allow</td>
+<td>Outbound</td>
+</tr>
+<tr>
+<td>SSH server</td>
+<td>10.1.0.1</td>
+<td>172.16.0.1</td>
+<td>22</td>
+<td>TCP</td>
+<td>Allow</td>
+<td>Inbound</td>
+</tr>
+<tr>
+<td>Web server</td>
+<td>any</td>
+<td>10.2.0.1</td>
+<td>80, 443</td>
+<td>TCP</td>
+<td>Allow</td>
+<td>Inbound</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p><!-- /wp:table --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let’s say that we want to allow a user to browse the web. We would need to allow two outbound rules: one for DNS and the other for the web. When a user enters an address such as www.google.com, DNS would be required to find the IP address of www.google.com. The first rule enables this by allowing all computers on the LAN (192.168.2.0/24) to contact the DNS server (1.1.1.3) on port 53. The second rule permits computers on the LAN to access the web over ports 80 or 443. The next two rules are slightly different compared to the first two as the direction is inbound. The third rule allows 10.1.0.1 to access the SSH server (172.16.0.1) on port 22. Lastly, the fourth rule allows any computer to connect to the web server (10.2.0.1) over the internet and access websites that are hosted on the web server.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Stateful Firewalls and the Implicit Deny Rule</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Stateful firewalls will automatically allow related traffic in the opposite direction even though the configured rule only allows traffic in one direction. For example, even though the second rule in the above example allows the initial connection from 192.168.2.0/24 to 1.1.1.3, the return traffic from 1.1.1.3 to 192.168.2.0/24 would also be allowed without having to configure an additional rule. There is also a hidden rule that applies to many firewalls known as an ‘implicit deny’. Using this rule, if the network traffic being examined by the firewall does not match any of the configured rules, it will be denied. For instance, if a user on the LAN (192.168.2.0/24) has configured their DNS settings to point to 1.2.3.4 instead of 1.1.1.3, they will not be able to access the internet. This is because there is no rule configured on the firewall that allows the computer to connect to a DNS server with an IP address of 1.2.3.4. Using an implicit deny essentially creates a whitelist of rules that only allows traffic that matches the configured rules.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>The Role of Firewalls in Cyber Defence</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Up until now, the discussion has focused on how firewalls control inbound and outbound traffic using rules, but how do these rules aid with cyber defence? There are many cyberthreats such as <a rel="noreferrer noopener" href="https://en.wikipedia.org/wiki/Internet_bot#Malicious_bots" target="_blank">bots</a> that continuously scan the internet, looking to gain unauthorised access to vulnerable targets by attacking common services such as <a rel="noreferrer noopener" href="https://en.wikipedia.org/wiki/Secure_Shell" target="_blank">SSH</a> and <a rel="noreferrer noopener" href="https://en.wikipedia.org/wiki/Remote_Desktop_Protocol" target="_blank">RDP</a>. By using a firewall, this malicious activity can be prevented. For instance, referring to the firewall rules example above, the third rule only permits 10.1.0.1 to access the SSH server (172.16.0.1). Any other SSH traffic from other hosts will be blocked including malicious bots. Similarly, all RDP traffic will also be blocked as there is no rule configured on the firewall that permits this traffic. As a result, any attempts to gain unauthorised access via RDP will be denied. A firewall is an important security control to include in your cyber defence – without one, any connections from an untrusted network would be allowed, which will expose your system to cyberthreats.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,78 @@
+---
+layout: post
+status: publish
+published: true
+title: An Insight into the Certified Red Team Operator 2021 Course
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 706
+wordpress_url: https://oncybersec.com/?p=706
+date: '2022-01-11 18:39:34 +0200'
+date_gmt: '2022-01-11 16:39:34 +0200'
+tags:
+- penetration testing
+- red teaming
+- crto
+comments: []
+---
+<p><!-- wp:heading --></p>
+<h2><strong>Introduction</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>I passed the <a rel="noreferrer noopener" href="https://www.zeropointsecurity.co.uk/red-team-ops/overview" data-type="URL" data-id="https://www.zeropointsecurity.co.uk/red-team-ops/overview" target="_blank">Red Team Operator</a> (RTO) exam after going through the <a rel="noreferrer noopener" href="https://www.zeropointsecurity.co.uk/blog/red-team-ops-2021-update" target="_blank">updated RTO course</a> and labs. The RTO course covers red team principles such as adversary simulation, command and control and OPSEC considerations, while also focusing on internal penetration testing such as Active Directory attacks. This post will cover the prerequisites, course, labs, exam and tips that I used to take on the updated RTO exam.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Prerequisites</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The prerequisites of the course include a basic understanding of the below:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Windows and Active Directory</li>
+<li>Scripting and programming languages such as PowerShell and C#</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Before taking the course, I previously obtained the OSCP. While not required, it did help with approaching the machines using a hacking methodology. However, as indicated on the <a href="https://www.zeropointsecurity.co.uk/red-team-ops/overview#block-yui_3_17_2_1_1622640854997_320449" target="_blank" rel="noreferrer noopener">Zero-Point Security website</a>, “The most successful students are not those that have the greater technical knowledge from the outset.&nbsp; Success comes from a passion for learning new skills, solving problems, resilience and fortitude”.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Course</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The course is delivered online via the Canvas platform. As a result, the <a href="https://www.zeropointsecurity.co.uk/red-team-ops/overview#block-yui_3_17_2_1_1622219460376_31742" target="_blank" rel="noreferrer noopener">course content</a> is not downloadable in a format such as a PDF. However, you get lifetime access to the course content which gets updated with new topics periodically. The course also has a search function that allows you to search for specific keywords contained in the course. The course starts by introducing the reader to some theory such as red teaming and as the course progresses, covers practical topics such as using Cobalt Strike for command and control and adversary simulation. The course content is mostly in written format with some sections also including videos. Some of the videos provide an alternative way to perform an attack. Knowing alternative methods for the same attack is useful if one attack method does not work. The course content also covers OPSEC considerations where an attack method is explained followed by what modifications need to be made to the attack to avoid detection.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The underlying C2 framework that is used in the course is Cobalt Strike. This is beneficial to know as Cobalt Strike is a popular C2 framework that is used by both red teams and Advanced Persistent Threats (APTs). Concerning offensive tooling, the course covers open-source C# and PowerShell tools used during post-exploitation such as BloodHound, Rubeus and PowerView. While the course demonstrates using these tools within Cobalt Strike, these tools can also be used outside Cobalt Strike, which is useful if you are using a different C2 framework. A discord channel (Zero-Point Security) is also available if support is needed during the course.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Labs</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The RTO course provides an online lab environment to try out the commands that are included throughout the course using the Snap Labs platform. Unlike other courses such as the OSCP, lab time is consumed when the lab machines are powered on. This means that you can pause your lab time by powering down the machines and if you need more lab time, this can be purchased in hours. Additionally, you are provided with a private lab environment. The labs provide a large number of machines in different Active Directory domains that can be used to practice the attack methods that are covered in the course such as pivoting. Also included in the labs is a Splunk machine, which can be used to verify if your attacks have been detected by reviewing the events, which is also beneficial to know from a blue team perspective.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Exam</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The RTO exam is a 48-hour exam over 4 days. Similar to the labs, the exam machines can be powered down. Each machine contains a flag that must be submitted via the Scoring interface on Snap Labs. To pass the exam, 6 out of 8 flags are required and you will be informed if you passed at the end of the exam via auto-grading (a report is not required for the exam). The exam machines will test one's methodology and out of the box thinking while also requiring one to perform additional research. After scheduling the exam, you will receive a document containing a threat profile, which covers the Tactics, Techniques, and Procedures (TTPs) that one should follow during the exam. Below are some tips that can help when taking on the exam.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Tips</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li><strong>Cheat sheet:</strong> create a cheat sheet of commands as you go through the course materials – this will save time later when looking up a specific command during the exam</li>
+<li><strong>Test the commands:</strong> each section of the course contains commands - in several instances, I found that some commands did not work and had to do some research to address the issue</li>
+<li><strong>Learn multiple ways to perform an attack:</strong> this will be beneficial if a specific attack method does not work</li>
+<li><strong>Practice in labs:</strong> the labs provide a large number of machines to practice what you have learnt throughout the course</li>
+<li><strong>Record a log during the exam:</strong> this will help you keep track of what you tried and why it did not work</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:heading --></p>
+<h2><strong>Conclusion</strong></h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Having completed the RTO course and exam, I found it to be a good learning experience. The detailed course content and labs along with the course being lifetime access and receiving periodic updates is a plus. Additionally, having access to Cobalt Strike as the underlying C2 framework without having to obtain a license was beneficial. I found that the exam tested one’s out of the box thinking and enjoyed the whole experience. I would recommend this course to any aspiring red teamer.</p>
+<p><!-- /wp:paragraph --></p>

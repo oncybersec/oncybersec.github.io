@@ -1,0 +1,72 @@
+---
+layout: post
+status: publish
+published: true
+title: Automating Time-Based Blind SQL Injection using Bash
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 178
+wordpress_url: https://oncybersec.com/?p=178
+date: '2021-02-14 10:32:17 +0200'
+date_gmt: '2021-02-14 08:32:17 +0200'
+tags:
+- penetration testing
+- bash
+- oscp
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>This post introduces a bash script that I wrote (<a rel="noreferrer noopener" href="https://github.com/oncybersec/time-blind-sqli" target="_blank">time_blind_sqli.sh</a>) during my OSCP journey that can be used to exploit time-based blind SQL injection in vulnerable parameters located in GET or POST requests. While the use of SQLmap is permitted in the PWK labs, it is important to understand how to exploit SQL injection vulnerabilities without SQLmap as doing so will go a long way when preparing for the exam. While it is tedious to extract data from a target manually via a blind SQL injection vulnerability, this process can be automated using bash. I will be running the script against <a rel="noreferrer noopener" href="https://dvwa.co.uk/" target="_blank">DVWA</a> to demonstrate exploiting SQL injection in a GET request and will use OWASP Mutillidae II from <a rel="noreferrer noopener" href="https://sourceforge.net/projects/websecuritydojo/" target="_blank">Web Security Dojo</a> to exploit SQL injection in a POST request.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>SQL Injection via GET Parameter</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The DVWA 'SQL Injection (Blind)' page has an id GET parameter that is vulnerable to SQL injection. As we also must be authenticated to access this page, we need to make note of the cookie that is set by DVWA. We can obtain the cookie by using Burp Suite. Log into DVWA using the username ‘admin’ and password ‘password’. Select ‘DVWA Security’ and set the security level to ‘low’. With your browser’s proxy set to Burp and the interceptor enabled, select ‘SQL Injection (Blind)’. In Burp, take note of the cookie value. This will be used by the script to authenticate to DVWA using the -c flag.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":287,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_1_cookie.png" alt="" class="wp-image-287"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>As the GET id parameter is vulnerable (-p), we need to set its value to PAYLOAD so that the script knows where to insert the provided SQL query (-s). Running the script extracts the root user with a blank password:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>./time_blind_sqli.sh -u "http://192.168.56.101/vulnerabilities/sqli_blind/?id=PAYLOAD&amp;Submit=Submit" -p id -c "PHPSESSID=sv43imms0ubmpig14pi715h9a7; security=low" -s "SELECT GROUP_CONCAT(user,0x3A,password) FROM mysql.user WHERE user = 'root'" -t 2</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:image {"id":288,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_2_dvwa.png" alt="" class="wp-image-288"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2>SQL Injection via POST Parameter</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The OWASP Mutillidae II login page (/mutillidae/index.php?page=login.php) has two POST parameters (username and password) that are vulnerable to SQL injection. We can use Burp to intercept the login page and obtain the POST data that can be provided to the script using the -d flag.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":290,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_3_burp_post.png" alt="" class="wp-image-290"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>As demonstrated below, the script exploits the username POST parameter to extract the root user and password hash:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>./time_blind_sqli.sh -u "http://nowasp.local/mutillidae/index.php?page=login.php" -d "username=PAYLOAD&amp;password=pass&amp;login-php-submit-button=Login" -p username -s "SELECT GROUP_CONCAT(user,0x3A,authentication_string) FROM mysql.user WHERE user = 'root'" -t 2</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:image {"id":291,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_4_mutillidae.png" alt="" class="wp-image-291"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>It is important to note that when specifying a duration for time delay, choosing a lower value may result in inaccurate results – in this case, use a higher duration for the time delay. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>SQL Injection Payload</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The below line from the script is used to execute the provided SQL query and extract the results of the SQL query one character at a time by using the SLEEP function to cause a delay if there is a matching character:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>payload="' OR (SELECT IF((ASCII(SUBSTRING(($sql),$i,1)))=$c,SLEEP($t),0))-- -"</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The script in its current form works against MySQL databases for injecting into string parameters. To adapt the script for other DBMSs, the above $payload value will need to be modified. To troubleshoot any issues or to take a look at the requests being submitted by this script, Burp proxy can be used as discussed in <a rel="noreferrer noopener" href="{{site.url}}/using-burp-to-troubleshoot-exploits/" target="_blank">this post</a>.</p>
+<p><!-- /wp:paragraph --></p>

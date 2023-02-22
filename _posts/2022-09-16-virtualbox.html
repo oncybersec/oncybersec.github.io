@@ -1,0 +1,205 @@
+---
+layout: post
+status: publish
+published: true
+title: Using Virtualbox to Set Up a Virtual Environment
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 806
+wordpress_url: https://oncybersec.com/?p=806
+date: '2022-09-16 17:13:05 +0200'
+date_gmt: '2022-09-16 15:13:05 +0200'
+tags:
+- virtualbox
+- virtualization
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>When looking to create a lab, one option would be to obtain physical machines. However, it is possible to install virtual machines on a single computer using virtualization technology such as Virtualbox. This requires that your host computer has sufficient resources, such as memory and storage, with the amount of resources that you allocate to the virtual machine being shared by your host computer. This post will cover how to set up a virtual machine which will run the Ubuntu operating system.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Downloading and Installing Virtualbox</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Start by downloading Virtualbox from <a rel="noreferrer noopener" href="https://www.virtualbox.org/wiki/Downloads" target="_blank">here</a>. Once downloaded, the setup can be run by accepting the defaults for each step. After this has been done, an operating system also needs to be downloaded. This demonstration will be using <a rel="noreferrer noopener" href="https://ubuntu.com/download/desktop" target="_blank">Ubuntu</a> 22.04.1.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Creating a Virtual Machine</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>With Virtualbox open, select "New":</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":807,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_1.png" alt="New VM" class="wp-image-807"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Enter the details for the virtual machine you are creating:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":809,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_2.png" alt="VM details" class="wp-image-809"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Specify the amount of memory for the virtual machine:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":810,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_3.png" alt="VM memory" class="wp-image-810"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Select "Create" to create a hard disk and continue to select "Next" while accepting the "VDI" and "Dynamically allocated" options:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":811,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_4.png" alt="VM hard disk" class="wp-image-811"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:image {"align":"center","id":813,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_5.png" alt="VM hard disk type" class="wp-image-813"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:image {"align":"center","id":814,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_6.png" alt="VM storage" class="wp-image-814"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>You will then need to specify the hard disk size then click "Create":</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":815,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_7.png" alt="VM size" class="wp-image-815"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Set the processor to use 2 CPUs under <strong>Machine &gt; Settings &gt; System &gt; Processor</strong>:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":817,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_8.png" alt="VM processor" class="wp-image-817"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2>Installing Ubuntu on the Virtual Machine</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Select <strong>Optical Drive &gt; Choose a disk file</strong> and select the Ubuntu iso file to insert it into the virtual machine</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":818,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/vm_setup_9.png" alt="VM optical drive" class="wp-image-818"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Start the virtual machine:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":819,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-full"><img src="{{site.url}}/assets/images/vm_setup_10.png" alt="Start VM" class="wp-image-819"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Select "Try or install Ubuntu":</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":820,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/ubuntu_install_1.png" alt="Try or install Ubuntu" class="wp-image-820"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Select "Install Ubuntu":</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":821,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/ubuntu_install_2.png" alt="Install Ubuntu" class="wp-image-821"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Continue until "Updates and other software" - this setup will be using a minimal installation:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":822,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/ubuntu_install_3.png" alt="" class="wp-image-822"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Next, select "Erase disk" and continue with the installation:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":823,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/ubuntu_install_4.png" alt="Installation type" class="wp-image-823"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Enter the user details and password:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":824,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/ubuntu_install_5.png" alt="Ubuntu user" class="wp-image-824"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>The installation will begin and once finished, the virtual machine will need to be restarted. Below is the virtual machine once this process is complete:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":844,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/ubuntu_install6.png" alt="Ubuntu desktop" class="wp-image-844"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:heading --></p>
+<h2>Installing Guest Additions</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this section, we will be installing the Guest Additions software that comes with Virtualbox. This will allow us to use the virtual machine with an increased resolution in full screen and enable a shared clipboard for copying text between the virtual machine and the host computer.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Select <strong>Devices &gt; Insert Guest Additions CD image:</strong></li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":846,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/guest_additions1.png" alt="Inserting Guest Additions" class="wp-image-846"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Open a terminal by right-clicking and selecting "Open in Terminal"</li>
+<li>Run <code>sudo apt update</code> to update the package lists:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":827,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/guest_additions_2.png" alt="Updating package lists" class="wp-image-827"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Run the below to install pre-requisite packages:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>sudo apt install gcc make linux-headers-$(uname -r)</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:image {"align":"center","id":828,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/guest_additions_3.png" alt="Installing packages" class="wp-image-828"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>We can then install Guest Additions by running:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>cd /media/lab/VBox_GAs_6.1.38/
+sudo ./VBoxLinuxAdditions.run</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:image {"align":"center","id":829,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.url}}/assets/images/guest_additions_4.png" alt="Installing Guest Additions" class="wp-image-829"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Once that's done, the virtual machine will need to be restarted</li>
+<li>The shared clipboard can be enabled by navigating to <strong>Settings &gt; General &gt; Advanced and setting</strong> it to "Bidirectional":</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"align":"center","id":847,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-large"><img src="{{site.url}}/assets/images/guest_additions5-1024x554.png" alt="Enabling shared clipboard" class="wp-image-847"/></figure>
+<p><!-- /wp:image --></p>

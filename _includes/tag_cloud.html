@@ -1,0 +1,26 @@
+<h1 id="tags">Tags</h1>
+
+<div id="tag-container">
+
+  {% assign tags = site.tags | sort %}
+
+  {% assign count = 0 %}
+
+  {% for tag in tags %}
+    <span class="site-tag">
+      <a href="/tags/{{ tag | first | replace:' ', '_' }}/"
+        style="font-size: {{ tag | last | size  |  times: 4 | plus: 90  }}%">
+            {{ tag[0] | replace:'-', ' ' }}
+      </a>
+    </span>
+
+    {% assign count = count | plus: 1 %}
+    {% assign remainder = count | modulo: 7 %}
+
+    {% if remainder == 0 %}
+      <br>
+    {% endif %}
+
+  {% endfor %}
+
+</div>

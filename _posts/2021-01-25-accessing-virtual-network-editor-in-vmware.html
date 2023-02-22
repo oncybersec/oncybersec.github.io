@@ -1,0 +1,44 @@
+---
+layout: post
+status: publish
+published: true
+title: Accessing Virtual Network Editor in VMware Workstation Player
+author:
+  display_name: oncybersec
+  url: ''
+wordpress_id: 112
+wordpress_url: https://oncybersec.com/?p=112
+date: '2021-01-25 21:14:40 +0200'
+date_gmt: '2021-01-25 19:14:40 +0200'
+tags:
+- vmware
+- networking
+- virtualization
+comments: []
+---
+<p><!-- wp:paragraph --></p>
+<p>Problem: you are running a virtual machine using VMware Workstation Player and want to change the network settings of the VMware network adaptors such as VMnet1 and VMnet8, but you are unable to find a way to do this. This can be done using the Virtual Network Editor (vmnetcfg.exe). However, this utility is only available in VMware Workstation Pro. Despite this, it is possible to use Virtual Network Editor with VMware Workstation Player. The details on how to do this, in Windows, are discussed below:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol>
+<li>Update VMware Workstation Player to the latest version by navigating to <strong>Player &gt; Help &gt; Software Updates &gt; Check for Updates</strong> and follow the prompts (the latest version at the time of this writing is version 15.5.7)</li>
+</ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":264,"sizeSlug":"large","linkDestination":"none","className":"is-style-default"} --></p>
+<figure class="wp-block-image size-large is-style-default"><img src="{{site.url}}/assets/images/figure_1_update.png" alt="" class="wp-image-264"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list {"ordered":true,"start":2} --></p>
+<ol start="2">
+<li>Download the latest version of VMware Workstation Pro (Trial) from <a rel="noreferrer noopener" href="https://www.vmware.com/go/getworkstation-win" target="_blank">https://www.vmware.com/go/getworkstation-win</a> (the latest version at the time of this writing is version 16.1.0)</li>
+<li>Extract the contents of VMware-workstation-full-*.exe using a utility like 7-Zip</li>
+<li>Navigate into the extracted contents then extract ‘Workstation.cab’ file</li>
+<li>Navigate into the extracted contents and copy ‘vmnetcfg.exe’ to your VMware Workstation Player installation folder (e.g. C:\Program Files (x86)\VMware\VMware Player)</li>
+<li>Running vmnetcfg.exe as administrator will open the Virtual Network Editor, where you will be able to modify network settings used by VMware Workstation Player</li>
+</ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"id":265,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/images/figure_2_vmnetcfg.png" alt="" class="wp-image-265"/></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p><strong>Note:</strong> when updating VMware Workstation Player, Virtual Network Editor will need to be updated manually by repeating steps 2 to 5 otherwise you may experience errors when running vmnetcfg.exe.</p>
+<p><!-- /wp:paragraph --></p>
